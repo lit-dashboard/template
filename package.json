@@ -2,7 +2,7 @@
   "name": "@lit-dashboard/template",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/dashboard.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack -d --config webpack.config.js",
@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/lit-dashboard/template#readme",
   "dependencies": {
-    "@lit-dashboard/lit-dashboard": "1.0.1"
+    "@lit-dashboard/lit-dashboard": "^1.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",
