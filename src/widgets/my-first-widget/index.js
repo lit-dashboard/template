@@ -15,7 +15,12 @@ class MyFirstWidget extends Widget {
 
   static get properties() {
     return {
-      someAttribute: { type: String, attribute: 'some-attribute' }
+      someAttribute: { 
+        type: String, 
+        attribute: 'some-attribute', 
+        reflect: true, 
+        primary: true
+      }
     };
   }
 
@@ -30,9 +35,8 @@ class MyFirstWidget extends Widget {
 
   render() {
     return html`
-      <p><strong>Attribute value:</strong> ${this.someAttribute}</p>
+      <p><strong>Attribute/Source value:</strong> ${this.someAttribute}</p>
       <p><strong>Slot value:</strong> <slot></slot></p>
-      <p><strong>Source value:</strong> ${this.sourceValue.toString()}</p>
     `;
   }
 }
@@ -41,5 +45,4 @@ registerWidget('my-first-widget', {
   class: MyFirstWidget,
   label: 'My First Widget',
   category: 'Some Category',
-  acceptedTypes: ['Boolean', 'Number', 'String'],
 });

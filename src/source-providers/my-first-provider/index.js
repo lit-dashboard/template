@@ -1,5 +1,6 @@
 import { SourceProvider } from '@lit-dashboard/lit-dashboard';
 import { addSourceProviderType } from '@lit-dashboard/lit-dashboard/app';
+import { isNull } from 'lodash';
 
 class MyFirstProvider extends SourceProvider {
 
@@ -16,45 +17,24 @@ class MyFirstProvider extends SourceProvider {
 	constructor(settings) {
 		super();
 		this.sourceRoot = settings.sourceRoot;
-		this.initSources = {};
 	}
 
 	updateFromProvider(updateSource) {
-		this.sources = new Proxy(this.initSources || {}, {
+
+		this.sources = new Proxy({}, {
 			get: (sources, key) => {
 				return sources[key];
 			},
-			set: (sources, key, { value, type, name }) => {
-
-				sources[key] = { value, type, name };
-
-				updateSource(key, {
-					value,
-					type,
-					name
-				});
-
+			set: (sources, key, value) => {
+				sources[key] = value;
+				updateSource(key, value);
 				return true;
 			}
 		});
 
-		updateSource(`${this.sourceRoot}/boolean`, {
-			value: true,
-			type: 'Boolean',
-			name: 'Some Boolean'
-		});
-
-		updateSource(`${this.sourceRoot}/number`, {
-			value: 10,
-			type: 'Number',
-			name: 'Some Number'
-		});
-
-		updateSource(`${this.sourceRoot}/string`, {
-			value: 'this is a string',
-			type: 'String',
-			name: 'Some String'
-		});
+		this.sources[`${this.sourceRoot}/boolean`] = true;
+		this.sources[`${this.sourceRoot}/number`] = 10;
+		this.sources[`${this.sourceRoot}/string`] = 'this is a string';
 	}
 
 	updateFromDashboard(key, value) {
@@ -66,18 +46,11 @@ class MyFirstProvider extends SourceProvider {
 		}
 
 		if (key in this.sources) {
-			if (type === this.sources[key].type) {
-				this.sources[key] = {
-					...this.sources[key],
-					value
-				};
+			if (type === this.getType(this.sources[key])) {
+				this.sources[key] = value;
 			}
 		} else {
-			this.sources[key] = {
-				value,
-				type,
-				name: key
-			}
+			this.sources[key] = value;
 		}
 	}
 }
